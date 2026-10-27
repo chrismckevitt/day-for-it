@@ -1,19 +1,16 @@
-import WaveLines from '@/components/aicanvas/wave-lines'
-
 export default function Hero() {
     return (
-        <div className="grid h-200 grid-cols-1 lg:grid-cols-2 bg-[#110F0C]">
-            <div className="relative" id="wave-lines-container">
-                <WaveLines/>
-                <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-                    <h1 className="text-7xl font-bold tracking-tight text-white">
-                        {`${"Boxer".toUpperCase()}.`}
+        <div className="grid h-200 grid-cols-1 lg:grid-cols-2 bg-primary">
+
+                <div className="">
+                    <h1 className="font-heading text-7xl font-bold text-primary-foreground">
+                       Day for It
                     </h1>
-                    <h2 className="text-5xltracking-tight text-white">
-                        {`${"Camp".toUpperCase()}`}
+                    <h2 className="font-heading text-5xl  text-primary-foreground">
+                       Campers
                     </h2>
                 </div>
-            </div>
+
             <div className="relative overflow-hidden">
                 <video
                     autoPlay

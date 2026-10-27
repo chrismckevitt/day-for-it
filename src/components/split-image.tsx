@@ -1,6 +1,6 @@
 export default function SplitImage() {
     return (
-        <div className="grid h-200 grid-cols-1 lg:grid-cols-2 bg-[#110F0C] relative">
+        <div className="grid h-200 grid-cols-1 lg:grid-cols-2 bg-primary relative">
             <div className="relative">
                 <img
                     alt="Boxer van parked in open landscape at golden hour"

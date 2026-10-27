@@ -2,7 +2,7 @@ import SliceType from '@/components/aicanvas/slice-type'
 
 export default function OnOffGrid() {
     return (
-        <div className="grid grid-cols-1 md:cols-2 lg:grid-cols-3 bg-[#110F0C]">
+        <div className="grid grid-cols-1 md:cols-2 lg:grid-cols-3 bg-primary">
             <div className="relative aspect-[4/3] lg:aspect-auto lg:h-125">
                 <img
                     alt="Boxer van exterior front angle"

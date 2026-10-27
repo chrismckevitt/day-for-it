@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import type { KeyboardEvent as ReactKeyboardEvent, RefObject } from 'react'
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
 import {
   motion,
   useMotionTemplate,
@@ -10,39 +10,15 @@ import {
 } from 'framer-motion'
 import { QRCodeSVG } from 'qrcode.react'
 
-function useTheme(ref: RefObject<HTMLElement | null>): 'light' | 'dark' {
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark')
-  useEffect(() => {
-    if (typeof document === 'undefined') return
-    const el = ref.current
-    const update = () => {
-      const card = el?.closest('[data-card-theme]') ?? null
-      const dark = card
-        ? card.classList.contains('dark')
-        : document.documentElement.classList.contains('dark')
-      setTheme(dark ? 'dark' : 'light')
-    }
-    update()
-    const observer = new MutationObserver(update)
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-    const cardWrapper = el?.closest('[data-card-theme]')
-    if (cardWrapper) {
-      observer.observe(cardWrapper, { attributes: true, attributeFilter: ['class'] })
-    }
-    return () => observer.disconnect()
-  }, [ref])
-  return theme
-}
-
 // ─── PeelCornerReveal ─────────────────────────────────────────────────────────
 // 2D SVG peel: a portrait card whose BR corner folds along diagonal A–B,
 // flipping a green triangular flap out past the card. The card inverts between
 // light and dark modes — in dark mode it's a white card on a near-black page;
 // in light mode the card itself is dark on a warm off-white page.
 
-// Colors that don't change with theme
-const PEEL_FILL = '#25D366'
-const PEEL_FILL_DEEP = '#128C7E'
+// Peel flap — Better Beer orange
+const PEEL_FILL = '#f57e3f'
+const PEEL_FILL_DEEP = '#c95e28'
 
 // Geometry (all in SVG units)
 const VB_W = 500
@@ -51,7 +27,7 @@ const CARD_W = 320
 const CARD_H = 440
 const CARD_X = 90 // top-left x of the card within the viewBox
 const CARD_Y = 70 // top-left y of the card within the viewBox
-const CARD_RADIUS = 12 // corner radius for TL, TR, BL (BR is carved by the peel)
+const CARD_RADIUS = 16 // corner radius for TL, TR, BL (BR is carved by the peel)
 
 // Card corner coordinates (derived)
 const TL = { x: CARD_X, y: CARD_Y }
@@ -68,23 +44,18 @@ const OPEN_H_PCT = 0.9
 // Idle ambient bob — subtle vertical breathing on the card at rest.
 const BOB_AMPLITUDE = 2.4
 
+// Card appearance — warm beige card with navy ink (Better Beer palette)
+const CARD_FILL = '#efe6dc'
+const CARD_INK = '#001f2d'
+const FOLD_STROKE = 'rgba(0,31,45,0.28)'
+const DIVIDER_STROKE = '#001f2d'
+const DROP_SHADOW = '4px 4px 24px rgba(0,31,45,0.35)'
+
 export default function PeelCornerReveal() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const theme = useTheme(containerRef)
   const [isOpen, setIsOpen] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
   const qrGroupRef = useRef<SVGGElement>(null)
-
-  // Theme-aware palette — the card inverts between modes.
-  //   dark  → white card on near-black page, black ink
-  //   light → dark card on warm off-white page, light ink
-  const CARD_FILL = theme === 'dark' ? '#FFFFFF' : '#121212'
-  const CARD_INK = theme === 'dark' ? '#0A0A0A' : '#F5F5F0'
-  const FOLD_STROKE = theme === 'dark' ? 'rgba(0,0,0,0.28)' : 'rgba(255,255,255,0.22)'
-  const DIVIDER_STROKE = theme === 'dark' ? CARD_INK : '#FFFFFF'
-  const DROP_SHADOW = theme === 'dark'
-    ? '4px 4px 24px rgba(0,0,0,0.55)'
-    : '4px 4px 24px rgba(20,15,10,0.28)'
 
   // Single progress 0..1 drives everything, smoothed by a spring.
   // Hover teases the peel open to ~0.18 (a small peek); tap locks fully open.
@@ -164,7 +135,7 @@ export default function PeelCornerReveal() {
   // straight (no arcs) so the peel math keeps working untouched.
   const cardPath = useMotionTemplate`M ${TL.x + CARD_RADIUS} ${TL.y} L ${TR.x - CARD_RADIUS} ${TR.y} A ${CARD_RADIUS} ${CARD_RADIUS} 0 0 1 ${TR.x} ${TR.y + CARD_RADIUS} L ${Bx} ${By} L ${Ax} ${Ay} L ${BL.x + CARD_RADIUS} ${BL.y} A ${CARD_RADIUS} ${CARD_RADIUS} 0 0 1 ${BL.x} ${BL.y - CARD_RADIUS} L ${TL.x} ${TL.y + CARD_RADIUS} A ${CARD_RADIUS} ${CARD_RADIUS} 0 0 1 ${TL.x + CARD_RADIUS} ${TL.y} Z`
 
-  // Peel polygon (the visible green flap): A → B → C
+  // Peel polygon (the visible orange flap): A → B → C
   const peelPoints = useMotionTemplate`${Ax},${Ay} ${Bx},${By} ${Cx},${Cy}`
 
   // Fold line coordinates for the thin highlight
@@ -268,7 +239,7 @@ export default function PeelCornerReveal() {
         onPointerLeave={() => setIsHovered(false)}
         whileHover={{ scale: 1.015 }}
         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-        className="relative w-[185px] lg:w-[289px] cursor-pointer select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-4 focus-visible:ring-offset-transparent rounded-[20px]"
+        className="relative w-[185px] lg:w-[289px] cursor-pointer select-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[#f57e3f] focus-visible:ring-offset-4 focus-visible:ring-offset-transparent rounded-2xl"
         style={{ y: bobY, filter: `drop-shadow(${DROP_SHADOW})` }}
       >
 
@@ -318,13 +289,13 @@ export default function PeelCornerReveal() {
                 visibly radiates. */}
             <g
               transform={`translate(${CARD_X + 24}, ${CARD_Y + 62}) scale(1.5)`}
-              stroke={PEEL_FILL}
+              stroke={CARD_INK}
               strokeWidth={1.6}
               strokeLinecap="round"
               strokeLinejoin="round"
               fill="none"
             >
-              <circle cx="8" cy="12.5" r="1.4" fill={PEEL_FILL} />
+              <circle cx="8" cy="12.5" r="1.4" fill={CARD_INK} />
               <motion.path
                 d="M4 9 Q8 5 12 9"
                 animate={{ opacity: [0.15, 1, 0.15] }}
@@ -413,17 +384,18 @@ export default function PeelCornerReveal() {
             <text
               x={CARD_X + 24}
               y={CARD_Y + CARD_H - 20}
-              fill={PEEL_FILL}
+              fill={CARD_INK}
               fontFamily="var(--font-sans, ui-sans-serif, system-ui, sans-serif)"
               fontSize={9}
               fontWeight={900}
               letterSpacing={2.5}
+              opacity={0.5}
             >
               WHATSAPP
             </text>
           </g>
 
-          {/* Peel triangle (green flap) */}
+          {/* Peel triangle (orange flap) */}
           <motion.g>
             <motion.polygon
               points={peelPoints}
@@ -463,8 +435,8 @@ export default function PeelCornerReveal() {
                     width: QR_SIZE,
                     height: QR_SIZE,
                     padding: 6,
-                    background: '#FFFFFF',
-                    borderRadius: 6,
+                    background: '#efe6dc',
+                    borderRadius: 12,
                     boxSizing: 'border-box',
                   }}
                 >
@@ -472,8 +444,8 @@ export default function PeelCornerReveal() {
                     value="https://wa.me/447921173063"
                     size={QR_SIZE - 12}
                     level="M"
-                    bgColor="#FFFFFF"
-                    fgColor="#0A0A0A"
+                    bgColor="#efe6dc"
+                    fgColor="#001f2d"
                     style={{ display: 'block' }}
                   />
                 </div>

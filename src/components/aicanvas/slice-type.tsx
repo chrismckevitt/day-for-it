@@ -8,12 +8,12 @@ import {
 } from 'framer-motion'
 import type { MotionValue } from 'framer-motion'
 
-// The component is always in dark mode at rest — dark bg, light text.
-// On hover it inverts to light mode in sync with the word reveal.
-const DARK_BG = '#110F0C'
-const LIGHT_BG = '#FFFFFF'
-const DARK_FG = '#FFFFFF'
-const LIGHT_FG = '#110F0C'
+// At rest the component shows navy bg with cream text.
+// On hover it inverts to cream bg with navy text in sync with the word reveal.
+const DARK_BG = '#001f2d'
+const LIGHT_BG = '#efe6dc'
+const DARK_FG = '#efe6dc'
+const LIGHT_FG = '#001f2d'
 
 // Measures how many pixels of "air" (side-bearing) sit between a character's
 // advance-width origin and its leftmost ink pixel by rasterising to a canvas.
@@ -228,7 +228,7 @@ export default function SliceType() {
   }
 
   const sharedTextStyle: React.CSSProperties = {
-    fontFamily: '"Space Grotesk Variable", ui-sans-serif, system-ui, sans-serif',
+    fontFamily: "'made_gentleregular', sans-serif",
     fontWeight: 900,
     fontSize: 'clamp(3.5rem, 18vw, 5rem)',
     lineHeight: 0.92,

@@ -731,7 +731,7 @@ export default function StickerWall() {
                         />
                         <button
                             type="submit"
-                            className="sticker-wall-send flex items-center rounded-2xl px-5 py-2 text-sm tracking-wide"
+                            className="sticker-wall-send flex items-center rounded-full px-5 py-2 text-sm tracking-wide"
                             style={{
                                 background: accentBg,
                                 color: accentText,

@@ -113,7 +113,7 @@ export function Page() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <section className="mx-auto max-w-7xl px-6 py-12">
-        <h1 className="font-heading text-4xl font-bold tracking-tight">
+        <h1 className="font-heading text-4xl font-bold ">
           Better days ahead.
         </h1>
 
@@ -164,7 +164,7 @@ Use `font-heading` or `font-sans` rather than declaring a separate font family i
 
 Recommended conventions:
 
-- Page headings: `font-heading text-4xl font-bold tracking-tight`
+- Page headings: `font-heading text-4xl font-bold `
 - Section headings: `font-heading text-2xl font-semibold`
 - Body text: `text-base leading-7`
 - Supporting text: `text-sm text-muted-foreground`
@@ -174,7 +174,7 @@ Example:
 
 ```tsx
 <div className="space-y-3">
-  <h1 className="font-heading text-4xl font-bold tracking-tight">
+  <h1 className="font-heading text-4xl font-bold ">
     Made for better days.
   </h1>
 
